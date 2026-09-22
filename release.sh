@@ -21,7 +21,7 @@ rm -f "$ZIP"
 ditto -c -k --keepParent TimeZoneBar.app "$ZIP"
 
 ./Tools/sparkle-bin/generate_appcast \
-  --download-url-prefix "https://github.com/maxblaauw/timezonebar/releases/download/v$VERSION/" \
+  --download-url-prefix "https://github.com/maxblaauw-tl/timezonebar/releases/download/v$VERSION/" \
   releases
 cp releases/appcast.xml appcast.xml
 
