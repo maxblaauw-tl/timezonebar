@@ -3,13 +3,33 @@
     <channel>
         <title>TimeZoneBar</title>
         <item>
+            <title>1.1</title>
+            <pubDate>Tue, 22 Sep 2026 11:40:17 +0200</pubDate>
+            <sparkle:version>4</sparkle:version>
+            <sparkle:shortVersionString>1.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[# 1.1
+
+- Add a note to any city or timezone (right-click a row → Add Note…) — handy for tracking
+  which client or team is in which city.
+- Fix the clock sometimes wrapping onto two lines (e.g. "11:31 A" / "M").
+- The app now checks for updates automatically and can check on demand from
+  Settings → Check for Updates…
+]]></description>
+            <enclosure url="https://github.com/maxblaauw-tl/timezonebar/releases/download/updates/TimeZoneBar-1.1.zip" length="1947596" type="application/octet-stream" sparkle:edSignature="OOzIoowvb61Xebush5VkAoNgZLj8CQ0Cy31gUvKQaWJsRn8WB5oN1lvMhIXvsb69CHAacpIwcKFF+zZ0OL3zBA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/maxblaauw-tl/timezonebar/releases/download/updates/TimeZoneBar4-3.delta" sparkle:deltaFrom="3" length="53330" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="941872" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="vJloWfXuZy86kphT1PXMdX6iIjRUAnRD7sOGrArTb4ZR8AXXLcO4/0xMYcL+V8HSq+9vJ3uo7xwRn2C7CeWdAw=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.0</title>
             <pubDate>Tue, 22 Sep 2026 11:30:06 +0200</pubDate>
             <sparkle:version>3</sparkle:version>
             <sparkle:shortVersionString>1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <enclosure url="https://github.com/maxblaauw-tl/timezonebar/releases/download/v1.0/TimeZoneBar-1.0.zip" length="1938824" type="application/octet-stream" sparkle:edSignature="818Vqlx+woOwdk2XfmHbK1ZEhYVi2cHNCiiuzgCTm3ZoHXpl+CoPPoSzjFmP+1LRJfUY7Hl67Pjv79hO7suHBw=="/>
+            <enclosure url="https://github.com/maxblaauw-tl/timezonebar/releases/download/updates/TimeZoneBar-1.0.zip" length="1938824" type="application/octet-stream" sparkle:edSignature="818Vqlx+woOwdk2XfmHbK1ZEhYVi2cHNCiiuzgCTm3ZoHXpl+CoPPoSzjFmP+1LRJfUY7Hl67Pjv79hO7suHBw=="/>
         </item>
     </channel>
 </rss>
