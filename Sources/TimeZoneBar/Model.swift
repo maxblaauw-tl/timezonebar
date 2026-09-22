@@ -9,6 +9,8 @@ struct City: Identifiable, Codable, Hashable {
     var id: UUID = UUID()
     var name: String
     var timeZoneID: String
+    /// Freeform note, e.g. "Client X" — who or what this city/timezone is for.
+    var note: String? = nil
 
     var timeZone: TimeZone { TimeZone(identifier: timeZoneID) ?? .current }
 }
@@ -91,6 +93,9 @@ final class AppStore: ObservableObject {
     @Published var localName: String {
         didSet { defaults.set(localName, forKey: Keys.localName) }
     }
+    @Published var localNote: String? {
+        didSet { defaults.set(localNote, forKey: Keys.localNote) }
+    }
 
     private enum Keys {
         // v2: v1 was seeded with sample cities on first launch. Bumping the key retires
@@ -101,6 +106,7 @@ final class AppStore: ObservableObject {
         static let use24 = "use24Hour"
         static let menuBarTime = "showMenuBarTime"
         static let localName = "localName"
+        static let localNote = "localNote"
     }
 
     private let defaults: UserDefaults
@@ -116,6 +122,7 @@ final class AppStore: ObservableObject {
         use24Hour = d.object(forKey: Keys.use24) as? Bool ?? true
         showMenuBarTime = d.object(forKey: Keys.menuBarTime) as? Bool ?? true
         localName = d.string(forKey: Keys.localName) ?? CityCatalog.defaultName(for: TimeZone.current.identifier)
+        localNote = d.string(forKey: Keys.localNote)
 
         // Starts empty on a fresh install — the panel opens the picker so the first thing
         // you do is choose your cities. Anything you pick is saved from then on.
@@ -150,7 +157,7 @@ final class AppStore: ObservableObject {
 
     /// Row 0 is always the local timezone.
     var localCity: City {
-        City(id: Self.localRowID, name: localName, timeZoneID: localTimeZone.identifier)
+        City(id: Self.localRowID, name: localName, timeZoneID: localTimeZone.identifier, note: localNote)
     }
 
     static let localRowID = UUID(uuidString: "00000000-0000-0000-0000-0000000010CA")!
@@ -180,6 +187,17 @@ final class AppStore: ObservableObject {
         }
         guard let idx = cities.firstIndex(where: { $0.id == city.id }) else { return }
         cities[idx].name = trimmed
+    }
+
+    func setNote(_ city: City, to newNote: String) {
+        let trimmed = newNote.trimmingCharacters(in: .whitespacesAndNewlines)
+        let value = trimmed.isEmpty ? nil : trimmed
+        if city.id == Self.localRowID {
+            localNote = value
+            return
+        }
+        guard let idx = cities.firstIndex(where: { $0.id == city.id }) else { return }
+        cities[idx].note = value
     }
 
     func move(_ city: City, by offset: Int) {

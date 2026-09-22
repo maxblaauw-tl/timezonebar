@@ -82,6 +82,8 @@ struct PanelView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(store.timeString(store.reference, tz: store.localTimeZone))
                     .font(.system(size: 30, weight: .semibold, design: .rounded).monospacedDigit())
+                    .lineLimit(1)
+                    .fixedSize()
                     .contentTransition(.numericText())
                     .animation(.smooth(duration: 0.2), value: store.reference)
                 Text(store.weekdayString(store.reference, tz: store.localTimeZone))

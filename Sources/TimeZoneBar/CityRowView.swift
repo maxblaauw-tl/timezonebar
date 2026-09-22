@@ -7,14 +7,18 @@ struct CityRowView: View {
 
     @State private var isRenaming = false
     @State private var draftName = ""
+    @State private var isEditingNote = false
+    @State private var draftNote = ""
     @State private var hovering = false
     @FocusState private var renameFocused: Bool
+    @FocusState private var noteFocused: Bool
 
     private var tz: TimeZone { city.timeZone }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 7) {
             topLine
+            noteLine
             TimeTrack(
                 dayStart: bounds.start,
                 span: bounds.span,
@@ -99,6 +103,8 @@ struct CityRowView: View {
             Text(store.timeString(store.reference, tz: tz))
                 .font(.system(size: 19, weight: .semibold, design: .rounded).monospacedDigit())
                 .foregroundStyle(store.hourClass(at: store.reference, tz: tz).textColor)
+                .lineLimit(1)
+                .fixedSize()
                 .contentTransition(.numericText())
                 .animation(.smooth(duration: 0.2), value: store.reference)
 
@@ -113,6 +119,35 @@ struct CityRowView: View {
                             label: city.name) {
                 withAnimation(.smooth(duration: 0.2)) { store.remove(city) }
             }
+        }
+    }
+
+    // MARK: Note line
+
+    @ViewBuilder
+    private var noteLine: some View {
+        if isEditingNote {
+            HStack(spacing: 7) {
+                TextField("Note, e.g. Client X", text: $draftNote)
+                    .textFieldStyle(.plain)
+                    .font(.system(size: 10.5))
+                    .focused($noteFocused)
+                    .onSubmit { commitNote() }
+                    .onExitCommand { isEditingNote = false }
+                    .padding(.horizontal, 8).padding(.vertical, 3)
+                    .glassBackground(in: Capsule())
+                Button("Done") { commitNote() }
+                    .font(.system(size: 10.5))
+                    .buttonStyle(.plain)
+                    .foregroundStyle(Color.accentColor)
+            }
+        } else if let note = city.note, !note.isEmpty {
+            Text(note)
+                .font(.system(size: 10.5, weight: .medium))
+                .italic()
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .onTapGesture { beginEditingNote() }
         }
     }
 
@@ -133,6 +168,7 @@ struct CityRowView: View {
             isRenaming = true
             DispatchQueue.main.async { renameFocused = true }
         }
+        Button((city.note?.isEmpty == false) ? "Edit Note…" : "Add Note…") { beginEditingNote() }
         Button("Copy Time") {
             let text = "\(city.name) — \(store.timeString(store.reference, tz: tz)) \(store.weekdayString(store.reference, tz: tz))"
             NSPasteboard.general.clearContents()
@@ -152,6 +188,17 @@ struct CityRowView: View {
     private func commitRename() {
         store.rename(city, to: draftName)
         isRenaming = false
+    }
+
+    private func beginEditingNote() {
+        draftNote = city.note ?? ""
+        isEditingNote = true
+        DispatchQueue.main.async { noteFocused = true }
+    }
+
+    private func commitNote() {
+        store.setNote(city, to: draftNote)
+        isEditingNote = false
     }
 
     // MARK: Derived
